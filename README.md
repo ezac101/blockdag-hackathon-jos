@@ -4,7 +4,7 @@
 
 ---
 
-## 🎯 Hackathon Theme Compliance
+## 🎯 Overview
 
 This is a suite of tools that fundamentally rethink how private data gets shared online. Instead of trusting companies with your emails and files, our platform puts control entirely in your hands through blockchain technology and end-to-end encryption.
 
