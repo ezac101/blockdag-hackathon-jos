@@ -6,14 +6,14 @@
 
 ## 🎯 Hackathon Theme Compliance
 
-**Challenge:** *Create a secure data transfer platform using BlockDAG chain that is inherently NIST/ISO compliant and protects data to Cyber Security standards. The platform must encrypt everything on-chain and ensure only holders of private keys or granted public key addresses can access the data.*
+This is a suite of tools that fundamentally rethink how private data gets shared online. Instead of trusting companies with your emails and files, our platform puts control entirely in your hands through blockchain technology and end-to-end encryption.
 
-**Our Solution:** We deliver **two production-ready applications** that exceed the theme requirements:
+**ChainMail** turns your blockchain wallet into an email address. When you send a message, it gets encrypted with military-grade cryptography before anything leaves your device. The encrypted content lives on decentralized storage (IPFS), while the blockchain just tracks who sent what when—creating a permanent, tamper-proof record that no one can censor or delete. Only the person with the right private key can read the message.
 
-1. **ChainMail** - Decentralized email with end-to-end PGP encryption
-2. **QuantumDrop (SyspecDrop)** - Anonymous file sharing with military-grade encryption
+**QuantumDrop** lets you share files anonymously without creating accounts. Upload something, and the system encrypts it twice: once with lightning-fast AES-256 (the same encryption banks use), then wraps that key with ML-KEM-768, a next-generation algorithm designed to resist even quantum computers. You get a passphrase to share, and anyone with it can claim the file. The blockchain verifies they have the right passphrase without ever revealing it, and multiple people can download the same file without recreating anything.
 
-Both platforms leverage BlockDAG's high-throughput architecture, IPFS decentralized storage, and implement cryptographic standards that meet **NIST SP 800-53**, **ISO 27001**, **GDPR**, and **HIPAA** compliance requirements.
+Both systems meet the hackathon's security requirements: data stays encrypted from the moment you create it, only authorized private keys unlock access, and everything follows NIST and ISO cybersecurity standards used by governments and enterprises worldwide.
+
 
 ---
 
