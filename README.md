@@ -4,153 +4,40 @@
 
 ---
 
-## 🎯 Overview
+## Overview
 
 This is a suite of tools that fundamentally rethink how private data gets shared online. Instead of trusting companies with your emails and files, our platform puts control entirely in your hands through blockchain technology and end-to-end encryption.
 
-**ChainMail** turns your blockchain wallet into an email address. When you send a message, it gets encrypted with military-grade cryptography before anything leaves your device. The encrypted content lives on decentralized storage (IPFS), while the blockchain just tracks who sent what when—creating a permanent, tamper-proof record that no one can censor or delete. Only the person with the right private key can read the message.
-
 **QuantumDrop** lets you share files anonymously without creating accounts. Upload something, and the system encrypts it twice: once with lightning-fast AES-256 (the same encryption banks use), then wraps that key with ML-KEM-768, a next-generation algorithm designed to resist even quantum computers. You get a passphrase to share, and anyone with it can claim the file. The blockchain verifies they have the right passphrase without ever revealing it, and multiple people can download the same file without recreating anything.
 
-Both systems meet the hackathon's security requirements: data stays encrypted from the moment you create it, only authorized private keys unlock access, and everything follows NIST and ISO cybersecurity standards used by governments and enterprises worldwide.
-
-
 ---
 
-## 📊 Executive Summary
+## Executive Summary
 
 | Project | Type | Encryption | Access Control | Compliance |
-|---------|------|-----------|---------------|------------|
-| **ChainMail** | Decentralized Email | OpenPGP RSA-4096 | Wallet private keys only | ✅ NIST, ISO 27001, GDPR |
-| **QuantumDrop** | File Sharing | AES-256-GCM + ML-KEM-768 | Passphrase + wallet ownership | ✅ NIST, ISO 27001, HIPAA |
+| **ChainMail** | Decentralized Email | OpenPGP RSA-4096 | Wallet private keys only | NIST, ISO 27001, GDPR |
 
-### Why This Meets the Challenge
 
-✅ **Data encrypted before blockchain/IPFS storage** - Zero plaintext exposure  
-✅ **Private key required** - Only wallet owners or passphrase holders can decrypt  
-✅ **NIST-approved algorithms** - AES-256, RSA-4096, Keccak-256, ML-KEM-768  
-✅ **ISO 27001 compliant** - Access control, audit logging, encryption at rest  
-✅ **Immutable audit trails** - Every transaction recorded on BlockDAG  
-✅ **No trusted third parties** - Fully decentralized architecture  
-✅ **Cross-sector applicability** - Healthcare, legal, enterprise, journalism  
-
+ - **Data encrypted before blockchain/IPFS storage** - Zero plaintext exposure  
+ - **Private key required** - Only wallet owners or passphrase holders can decrypt  
+ - **ISO 27001 compliant** - Access control, audit logging, encryption at rest  
+ - **Immutable audit trails** - Every transaction recorded on BlockDAG  
+ - **Cross-sector applicability** - Healthcare, legal, enterprise, journalism  
 ---
-
-## 🏗️ Architecture Overview
-
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                         User Applications                            │
-│  ┌──────────────────────────┐    ┌──────────────────────────────┐  │
-│  │      ChainMail (Web)     │    │  QuantumDrop (API + Web)     │  │
-│  │  Next.js 15 + React 19   │    │    Fastify + TypeScript      │  │
-│  │  - Wallet-based email     │    │  - Anonymous file drops      │  │
-│  │  - PGP E2E encryption     │    │  - Passphrase protection     │  │
-│  │  - Gasless transactions   │    │  - Unlimited claims (V3)     │  │
-│  └──────────────────────────┘    └──────────────────────────────┘  │
-│              │                                   │                   │
-└──────────────┼───────────────────────────────────┼──────────────────┘
-               │                                   │
-               └────────────┬──────────────────────┘
-                            │
-        ┌───────────────────┼───────────────────┐
-        │                   │                   │
-        ▼                   ▼                   ▼
-┌───────────────┐   ┌───────────────┐   ┌──────────────────┐
-│   BlockDAG    │   │ IPFS/Pinata   │   │  Relay Wallet    │
-│   Testnet     │   │   (Storage)   │   │  (ChainMail)     │
-│               │   │               │   │                  │
-│ ChainMail.sol │   │ Encrypted     │   │ Pays gas for     │
-│ QuantumDrop   │   │ Payloads      │   │ all users        │
-│    V3.sol     │   │               │   │                  │
-└───────────────┘   └───────────────┘   └──────────────────┘
-```
-
----
-
-## 📦 Project Structure
-
-```
-blockdag-hackathon-jos/
-├── chainmail/                      # Decentralized Email Platform
-│   ├── contracts/
-│   │   └── ChainMail.sol          # Solidity smart contract
-│   ├── src/
-│   │   ├── app/                   # Next.js App Router pages
-│   │   │   ├── page.tsx           # Dashboard/Inbox
-│   │   │   ├── login/page.tsx     # Wallet auth
-│   │   │   └── api/relay/         # Gas-free transaction APIs
-│   │   ├── components/ui/         # shadcn/ui components
-│   │   └── services/              # Core business logic
-│   │       ├── wallet.service.ts
-│   │       ├── encryption.service.ts  # OpenPGP encryption
-│   │       ├── ipfs.service.ts
-│   │       ├── blockchain.service.ts
-│   │       ├── email.service.ts
-│   │       └── relay.service.ts   # Server-side gas payer
-│   ├── DEPLOYMENT.md              # Setup guide
-│   ├── TECHNICAL_IMPLEMENTATION_OVERVIEW.md
-│   └── SERVICES_GUIDE.md
-│
-├── syspec-drop-backend-api/        # Anonymous File Sharing API
-│   ├── contracts/
-│   │   ├── QuantumDrop.sol        # V1 (single claim)
-│   │   ├── QuantumDropV2.sol      # V2 (improved)
-│   │   └── QuantumDropV3.sol      # V3 (unlimited claims)
-│   ├── src/
-│   │   ├── routes/
-│   │   │   ├── upload.route.ts    # File upload + encryption
-│   │   │   ├── claim.route.ts     # File claim + decryption
-│   │   │   └── status.route.ts    # Drop status check
-│   │   ├── services/
-│   │   │   ├── blockdag.service.ts
-│   │   │   ├── ipfs.service.ts
-│   │   │   └── zkp.service.ts     # Zero-knowledge proofs
-│   │   ├── middlewares/
-│   │   │   └── security.middleware.ts
-│   │   └── types/                 # TypeScript definitions
-│   ├── blockdag-scripts/          # Local node management
-│   │   ├── blockdag.sh
-│   │   ├── docker-compose.yml
-│   │   └── bin/bdag/              # Testnet node data
-│   └── README.md                  # Comprehensive API docs
-│
-├── guide.md                        # Hackathon briefing document
-└── README.md                       # This file
-```
-
----
-
-## 🔐 Project 1: ChainMail - Decentralized Email System
-
+## Project 1: ChainMail - Decentralized Email System
 ### Overview
 ChainMail reimagines email as a **censorship-resistant, immutable communication protocol** where wallet addresses serve as identities and every message is cryptographically sealed with military-grade PGP encryption.
 
 ### Key Innovations
-
 #### 1. **Wallet-as-Email Identity**
 - No usernames/passwords required
 - Addresses like `0x1234...@blockdag.mailchain` serve as email handles
 - Complete anonymity—no KYC, no personal data collection
 
-#### 2. **Relay Wallet System (Gas Abstraction)**
-**Problem:** Users need BDAG tokens before they can send emails.  
-**Solution:** Server-side relay wallet pays all gas fees.
-
 **How It Works:**
-```typescript
-// Frontend calls API (no gas required)
-await fetch('/api/relay/send-email', {
-  method: 'POST',
-  body: JSON.stringify({ recipient, ipfsHash, sender })
 });
 
-// Backend (relay.service.ts) signs & submits transaction
-const relayWallet = new ethers.Wallet(RELAY_WALLET_PRIVATE_KEY, provider);
-const tx = await contract.connect(relayWallet).logSendFor(sender, recipient, ipfsHash);
-```
 
-**Security:**
 - Relay private key never exposed to client
 - Smart contract validates relay address with `onlyRelay` modifier
 - Rate limiting prevents abuse
@@ -167,15 +54,10 @@ const keyPair = await openpgp.generateKey({
 // Encryption before IPFS upload
 const encrypted = await openpgp.encrypt({
   message: await openpgp.createMessage({ text: emailBody }),
-  encryptionKeys: recipientPublicKey
 });
 ```
 
 **Why PGP?**
-- Battle-tested since 1991
-- Asymmetric encryption (public key encrypts, private key decrypts)
-- Only recipient can read content—not even relay wallet
-
 #### 4. **Immutable Storage Architecture**
 - **Blockchain (BlockDAG):** Stores metadata (sender, recipient, timestamp, IPFS hash)
 - **IPFS (Pinata):** Stores encrypted email payloads
@@ -207,11 +89,6 @@ const encrypted = await openpgp.encrypt({
 | **ISO 27001:2013** | A.9.1.1 (access control), A.10.1.1 (cryptographic controls) |
 | **GDPR Article 32** | Encryption of personal data, pseudonymization (wallet addresses) |
 | **PCI DSS** | Strong cryptography (RSA-4096), key management (PBKDF2) |
-
-### Technology Stack
-- **Frontend:** Next.js 15, React 19, TypeScript, Tailwind CSS, shadcn/ui
-- **Blockchain:** Solidity ^0.8.20, ethers.js v6.15.0
-- **Encryption:** OpenPGP.js v6.2.2 (RSA-4096)
 - **Storage:** IPFS via Pinata, localStorage (key management)
 - **Network:** BlockDAG Testnet (RPC: `https://rpc-testnet.bdagscan.com`)
 
@@ -240,80 +117,58 @@ function getPublicKey(address _user)
 - **Contract Address:** `0x...` (BlockDAG Testnet)
 - **IPFS Gateway:** Pinata (`gateway.pinata.cloud`)
 - **Frontend:** Vercel (Next.js deployment)
-- **Relay Wallet:** Funded with BDAG tokens
 
 ---
 
-## 🚀 Project 2: QuantumDrop (SyspecDrop) - Anonymous File Sharing
+## Project 2: QuantumDrop (SyspecDrop) - Anonymous File Sharing
 
 ### Overview
-QuantumDrop enables **zero-knowledge file sharing** where files are encrypted client-side, stored on IPFS, and claimable via blockchain-verified passphrases. No accounts, no IP logging, no trust required.
 
 ### Key Innovations
 
 #### 1. **Hybrid Encryption Pipeline**
 **Why encrypt twice?**
 
-```typescript
 // Step 1: Generate random AES-256 key
 const symmetricKey = crypto.randomBytes(32);  // 256 bits
 
 // Step 2: Encrypt file with AES-256-GCM (fast, handles large files)
-const cipher = crypto.createCipheriv('aes-256-gcm', symmetricKey, iv);
 const encryptedFile = Buffer.concat([cipher.update(fileBuffer), cipher.final()]);
 
 // Step 3: Wrap symmetric key with ML-KEM-768 (quantum-resistant)
 const encryptedSymKey = await mlKem768.encapsulate(passphraseDerivedKey);
-
-// Step 4: Store on IPFS (encrypted file) + Blockchain (encryptedSymKey + hash)
 ```
 
-**Benefits:**
-- **AES-256:** Fast symmetric encryption for large files
-- **ML-KEM-768:** Post-quantum lattice-based key encapsulation
 - **Result:** File stays secure even if quantum computers break RSA
 
 #### 2. **Passphrase-Based Access Control**
-```typescript
 // Upload: Generate 12-word passphrase
 const passphrase = generateMnemonic(12);  // e.g., "quantum-secure-drop-anonymous..."
 
-// Store only hash on-chain (one-way function)
 const passphraseHash = keccak256(passphrase);
 
-// Claim: Verify hash without revealing passphrase
 function claimDrop(dropId, passphraseHash) {
   require(drops[dropId].passphraseHash == passphraseHash, "Invalid passphrase");
-  return (drops[dropId].ipfsHash, drops[dropId].encryptedSymKey);
 }
 ```
 
-**Why Keccak-256?**
 - Used by Ethereum/BlockDAG ecosystems
 - Quantum-resistant hashing (no known quantum attacks)
 - 256-bit output space (2^256 possible hashes) resists brute force
 
-#### 3. **Unlimited Claims (V3 Evolution)**
 
 | Version | Behavior | Use Case |
 |---------|----------|----------|
 | **V1** | Metadata burned after first claim | One-time secrets |
-| **V2** | Improved gas efficiency | Optimized V1 |
 | **V3** | Metadata persists forever | Team file sharing |
 
 **V3 Smart Contract:**
 ```solidity
 function claimDrop(string memory dropId, bytes32 passphraseHash) 
-    external returns (string memory ipfsHash, string memory encryptedSymKey) 
 {
     Drop storage drop = drops[dropId];
     require(drop.isActive, "Drop not active");
-    require(passphraseHashes[dropId] == passphraseHash, "Invalid passphrase");
     
-    drop.claimed = true;
-    drop.claimCount++;  // Track claims (analytics)
-    
-    // Metadata NOT burned—multiple claims allowed
     return (drop.ipfsHash, drop.encryptedSymKey);
 }
 ```
@@ -322,7 +177,6 @@ function claimDrop(string memory dropId, bytes32 passphraseHash)
 ```typescript
 // Magic byte detection (ipfs.service.ts)
 function detectFileType(buffer: Buffer): string {
-  const header = buffer.slice(0, 4).toString('hex');
   
   if (header === '89504e47') return 'png';  // PNG magic bytes
   if (header.startsWith('ffd8ff')) return 'jpg';
@@ -443,7 +297,7 @@ curl http://localhost:3000/api/status/27a905cd...
 
 ---
 
-## 🌐 BlockDAG Network Integration
+## BlockDAG Network Integration
 
 ### Why BlockDAG?
 
@@ -476,7 +330,7 @@ tail -f bin/bdag/logs/testnet/.log
 
 ---
 
-## 🎓 Technical Deep Dive
+## Technical Deep Dive
 
 ### Encryption Comparison
 
@@ -510,10 +364,10 @@ function logSendFor(address _sender, address _recipient, string memory _ipfsHash
 ```
 
 **Tradeoffs:**
-- ✅ Perfect UX (no wallet setup friction)
-- ✅ Mainstream adoption (no crypto knowledge required)
-- ⚠️ Relay wallet must stay funded
-- ⚠️ Rate limiting required to prevent abuse
+ - Perfect UX (no wallet setup friction)
+ - Mainstream adoption (no crypto knowledge required)
+ - Relay wallet must stay funded
+ - Rate limiting required to prevent abuse
 
 #### QuantumDrop Direct Payment
 ```solidity
@@ -524,10 +378,10 @@ function createDrop(string memory dropId, ...) external {
 ```
 
 **Tradeoffs:**
-- ✅ No relay infrastructure needed
-- ✅ No abuse risk (users pay per action)
-- ⚠️ Users need testnet tokens
-- ⚠️ Higher barrier to entry
+ - No relay infrastructure needed
+ - No abuse risk (users pay per action)
+ - Users need testnet tokens
+ - Higher barrier to entry
 
 ### IPFS Integration
 
@@ -562,14 +416,14 @@ async uploadFile(buffer: Buffer, fileName: string): Promise<string> {
 ```
 
 **Why Pinata?**
-- ✅ Automatic pinning (prevents garbage collection)
-- ✅ Global CDN (fast retrieval worldwide)
-- ✅ 99.9% uptime SLA
-- ✅ Free tier for testing (1 GB storage)
+ - Automatic pinning (prevents garbage collection)
+ - Global CDN (fast retrieval worldwide)
+ - 99.9% uptime SLA
+ - Free tier for testing (1 GB storage)
 
 ---
 
-## 🛡️ Security Audit Summary
+## Security Audit Summary
 
 ### ChainMail Security Features
 1. **No Plaintext Exposure:** Encryption happens client-side before IPFS upload
@@ -596,7 +450,7 @@ async uploadFile(buffer: Buffer, fileName: string): Promise<string> {
 
 ---
 
-## 📈 Use Cases & Impact
+## Use Cases & Impact
 
 ### ChainMail Applications
 - **Whistleblower Protection:** Anonymous, immutable communication
@@ -623,7 +477,7 @@ async uploadFile(buffer: Buffer, fileName: string): Promise<string> {
 
 ---
 
-## 🚀 Deployment & Testing
+## Deployment & Testing
 
 ### ChainMail Deployment
 
@@ -718,7 +572,7 @@ diff testfile.docx downloaded.docx  # Should be identical
 
 ---
 
-## 📊 Performance Benchmarks
+## Performance Benchmarks
 
 ### ChainMail Metrics
 - **Email Send Time:** ~5-8 seconds (IPFS upload + blockchain confirmation)
@@ -742,7 +596,7 @@ diff testfile.docx downloaded.docx  # Should be identical
 
 ---
 
-## 🔮 Future Roadmap
+## Future Roadmap
 
 ### Phase 1: Core Enhancements (Q1 2026)
 - [ ] ChainMail mobile app (React Native)
@@ -770,42 +624,42 @@ diff testfile.docx downloaded.docx  # Should be identical
 
 ---
 
-## 🏆 Hackathon Differentiators
+## Hackathon Differentiators
 
 ### Why This Submission Stands Out
 
 1. **Production-Ready Code**
-   - ✅ Full TypeScript type safety
-   - ✅ Comprehensive error handling
-   - ✅ Extensive documentation (README, guides, API docs)
-   - ✅ Deployed contracts on BlockDAG testnet
+  - Full TypeScript type safety
+  - Comprehensive error handling
+  - Extensive documentation (README, guides, API docs)
+  - Deployed contracts on BlockDAG testnet
 
 2. **Real-World Applicability**
-   - ✅ Solves actual enterprise pain points (compliance, privacy)
-   - ✅ Cross-sector use cases (healthcare, legal, finance)
-   - ✅ User-friendly design (no crypto jargon)
+  - Solves actual enterprise pain points (compliance, privacy)
+  - Cross-sector use cases (healthcare, legal, finance)
+  - User-friendly design (no crypto jargon)
 
 3. **Technical Depth**
-   - ✅ Novel relay wallet architecture (gas abstraction)
-   - ✅ Hybrid encryption (AES + ML-KEM-768)
-   - ✅ Smart contract versioning (V1 → V2 → V3)
-   - ✅ Automatic file type detection
+  - Novel relay wallet architecture (gas abstraction)
+  - Hybrid encryption (AES + ML-KEM-768)
+  - Smart contract versioning (V1 → V2 → V3)
+  - Automatic file type detection
 
 4. **Security Excellence**
-   - ✅ NIST/ISO compliant cryptography
-   - ✅ Zero-knowledge architecture
-   - ✅ Quantum-resistant algorithms
-   - ✅ Comprehensive security documentation
+  - NIST/ISO compliant cryptography
+  - Zero-knowledge architecture
+  - Quantum-resistant algorithms
+  - Comprehensive security documentation
 
 5. **Theme Alignment**
-   - ✅ BlockDAG as core infrastructure
-   - ✅ Encrypted on-chain data
-   - ✅ Private key access control
-   - ✅ Cyber security standards compliance
+  - BlockDAG as core infrastructure
+  - Encrypted on-chain data
+  - Private key access control
+  - Cyber security standards compliance
 
 ---
 
-## 📚 Documentation Index
+## Documentation Index
 
 ### ChainMail Docs
 - **README:** [`chainmail/README.md`](chainmail/README.md)
@@ -827,7 +681,7 @@ diff testfile.docx downloaded.docx  # Should be identical
 
 ---
 
-## 👥 Team: SyspecSolutions
+## Team: SyspecSolutions
 
 - **Lead Developer:** Ezana Zecarias
 - **GitHub:** [@ezanazecarias](https://github.com/ezanazecarias)
@@ -835,7 +689,7 @@ diff testfile.docx downloaded.docx  # Should be identical
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **BlockDAG Network** - For providing a high-performance, EVM-compatible blockchain
 - **IPFS/Pinata** - For decentralized storage infrastructure
@@ -845,13 +699,13 @@ diff testfile.docx downloaded.docx  # Should be identical
 
 ---
 
-## 📜 License
+## License
 
 Both projects are licensed under the **MIT License**.
 
 ---
 
-## 🔒 Security Disclosure
+## Security Disclosure
 
 Found a vulnerability? Please report responsibly:
 
@@ -862,7 +716,7 @@ Found a vulnerability? Please report responsibly:
 
 ---
 
-## 📞 Contact & Support
+## Contact & Support
 
 - **GitHub Issues:** [Report bugs or request features]
 - **Email:** contact@syspecsolutions.com
@@ -871,6 +725,6 @@ Found a vulnerability? Please report responsibly:
 
 ---
 
-**Built with ❤️ for privacy, security, and freedom.**
+**Built with care for privacy, security, and freedom.**
 
 *SyspecSolutions - Secure Data Transfer on BlockDAG*
